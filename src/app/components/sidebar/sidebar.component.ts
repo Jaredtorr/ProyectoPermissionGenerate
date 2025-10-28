@@ -20,7 +20,7 @@ export class SidebarComponent {
 
   sendToTutorados(event: Event) {
     event.preventDefault();
-    this.router.navigate(['']);
+    this.router.navigate(['dashboard/tutorados']);
   }
 
   sendToEvidences(event: Event) {
