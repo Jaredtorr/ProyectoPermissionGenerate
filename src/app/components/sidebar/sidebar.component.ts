@@ -25,7 +25,7 @@ export class SidebarComponent {
 
   sendToEvidences(event: Event) {
     event.preventDefault();
-    this.router.navigate(['']);
+    this.router.navigate(['dashboard/evidencias']);
   }
 
   sendToPermissions(event: Event) {
