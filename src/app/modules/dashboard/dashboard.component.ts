@@ -32,15 +32,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   updateTitle() {
-    const currentUrl = this.router.url;
-    
-    if (currentUrl.includes('generate-permission')) {
-    } else if (currentUrl === '/dashboard' || currentUrl === '/dashboard/') {
-      this.titleService.setTitle('Dashboard');
-    }
+  const currentUrl = this.router.url;
+
+  if (currentUrl.includes('tutorados')) {
+    this.titleService.setTitle('Tutorados');
+    this.titleService.setSearch(false); 
+  } else if (currentUrl.includes('generate-permission')) {
+    this.titleService.setTitle('Generar Permiso');
+    this.titleService.setSearch(false); 
+  } else if (currentUrl.includes('welcome')) {
+    this.titleService.setTitle('Inicio');
+    this.titleService.setSearch(true); 
+  } else {
+    this.titleService.setTitle('Dashboard');
+    this.titleService.setSearch(false);
   }
+}
+
 
   ngOnDestroy() {
     this.routerSubscription?.unsubscribe();
   }
+
+  
 }
