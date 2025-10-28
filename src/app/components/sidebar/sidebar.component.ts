@@ -15,7 +15,7 @@ export class SidebarComponent {
 
   sendToHome(event: Event) {
     event.preventDefault();
-    this.router.navigate(['dashboard'])
+    this.router.navigate(['dashboard/welcome']);
   }
 
   sendToTutorados(event: Event) {
@@ -25,7 +25,7 @@ export class SidebarComponent {
 
   sendToEvidences(event: Event) {
     event.preventDefault();
-    this.router.navigate(['']);
+    this.router.navigate(['dashboard/evidencias']);
   }
 
   sendToPermissions(event: Event) {
