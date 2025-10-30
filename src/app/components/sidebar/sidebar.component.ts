@@ -20,7 +20,7 @@ export class SidebarComponent {
 
   sendToTutorados(event: Event) {
     event.preventDefault();
-    this.router.navigate(['']);
+    this.router.navigate(['dashboard/tutorados']);
   }
 
   sendToEvidences(event: Event) {
@@ -31,5 +31,10 @@ export class SidebarComponent {
   sendToPermissions(event: Event) {
     event.preventDefault();
     this.router.navigate(['dashboard/generate-permission']);
+  }
+
+  sendToDocentes(event: Event) { // 👈 corregido
+    event.preventDefault();
+    this.router.navigate(['dashboard/docentes']);
   }
 }
