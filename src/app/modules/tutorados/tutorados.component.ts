@@ -6,7 +6,7 @@ import { ModalTutoradoComponent } from '../../components/modal-tutorado/modal-tu
 interface Alumno {
   matricula: string;
   nombre: string;
-  segundoNombre?: string;  // ← Agregado como opcional
+  segundoNombre?: string;  // ← Campo opcional
   apellidoP: string;
   apellidoM: string;
   correo: string;
@@ -24,8 +24,19 @@ interface Alumno {
 export class TutoradosComponent implements OnInit {
   alumnos: Alumno[] = [
     {
+      matricula: '12345',
+      nombre: 'Luis',
+      segundoNombre: 'Fernando',
+      apellidoP: 'García',
+      apellidoM: 'Lopez',
+      correo: 'luisf@gmail.com',
+      telefono: '555-123-4567',
+      tutor: 'Juan Pérez'
+    },
+    {
       matricula: '233335',
       nombre: 'Ali',
+      segundoNombre: 'Lopez',
       apellidoP: 'Lopez',
       apellidoM: 'Zunun',
       correo: '233335@lds.upchiapas.edu.mx',
@@ -33,8 +44,9 @@ export class TutoradosComponent implements OnInit {
       tutor: '966449933'
     },
     {
-      matricula: '233335',
+      matricula: '233336',
       nombre: 'Eduardo',
+      segundoNombre: 'Andrés',
       apellidoP: 'Toledo',
       apellidoM: 'Perez',
       correo: '233333@lds.upchiapas.edu.mx',
@@ -42,8 +54,9 @@ export class TutoradosComponent implements OnInit {
       tutor: '966449939'
     },
     {
-      matricula: '233335',
+      matricula: '233337',
       nombre: 'Daniel',
+      segundoNombre: 'Morales',
       apellidoP: 'Chanona',
       apellidoM: 'Castro',
       correo: '233355@lds.upchiapas.edu.mx',
