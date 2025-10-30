@@ -6,11 +6,12 @@ import { Login } from './modules/login/login';
 import { Evidencias } from './modules/evidencias/evidencias';
 import { WelcomeComponent } from './modules/welcome/welcome.component';
 import { DocentesComponent } from './modules/docentes/docentes.component';
-
+import { RegistroComponent } from './modules/registro/registro.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: Login },
+    { path: 'registro', component: RegistroComponent },
     { path: 'dashboard', component: DashboardComponent, children: [
         { path: 'generate-permission', component: GeneratePermissionComponent },
         { path: 'tutorados', component: TutoradosComponent },
