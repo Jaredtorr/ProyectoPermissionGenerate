@@ -32,4 +32,9 @@ export class SidebarComponent {
     event.preventDefault();
     this.router.navigate(['dashboard/generate-permission']);
   }
+
+  sendToDocentes(event: Event) { // 👈 corregido
+    event.preventDefault();
+    this.router.navigate(['dashboard/docentes']);
+  }
 }

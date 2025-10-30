@@ -5,6 +5,8 @@ import { TutoradosComponent } from './modules/tutorados/tutorados.component';
 import { Login } from './modules/login/login';
 import { Evidencias } from './modules/evidencias/evidencias';
 import { WelcomeComponent } from './modules/welcome/welcome.component';
+import { DocentesComponent } from './modules/docentes/docentes.component';
+
 
 export const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
@@ -13,6 +15,7 @@ export const routes: Routes = [
         { path: 'generate-permission', component: GeneratePermissionComponent },
         { path: 'tutorados', component: TutoradosComponent },
         { path: 'evidencias', component: Evidencias},
-        {path: 'welcome', component: WelcomeComponent}
+        {path: 'welcome', component: WelcomeComponent},
+        {path: 'docentes', component: DocentesComponent}
     ]}
 ];

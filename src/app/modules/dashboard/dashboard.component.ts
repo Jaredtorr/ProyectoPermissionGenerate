@@ -40,13 +40,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   } else if (currentUrl.includes('generate-permission')) {
     this.titleService.setTitle('Generar Permiso');
     this.titleService.setSearch(false); 
-  } else if (currentUrl.includes('welcome')) {
+  }   else if (currentUrl.includes('welcome')) {
     this.titleService.setTitle('Inicio');
     this.titleService.setSearch(true); 
   } else {
     this.titleService.setTitle('Dashboard');
     this.titleService.setSearch(false);
   }
+
 }
 
 
