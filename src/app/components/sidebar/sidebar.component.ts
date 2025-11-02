@@ -37,4 +37,9 @@ export class SidebarComponent {
     event.preventDefault();
     this.router.navigate(['dashboard/docentes']);
   }
+
+  sendToHistorial(event: Event) {
+    event.preventDefault();
+    this.router.navigate(['dashboard/historial']);
+  }
 }
