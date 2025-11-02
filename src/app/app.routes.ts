@@ -7,6 +7,7 @@ import { Evidencias } from './modules/evidencias/evidencias';
 import { WelcomeComponent } from './modules/welcome/welcome.component';
 import { DocentesComponent } from './modules/docentes/docentes.component';
 import { RegistroComponent } from './modules/registro/registro.component';
+import { DetallesPermisosComponent } from './modules/detalles-permisos/detalles-permisos.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
         { path: 'tutorados', component: TutoradosComponent },
         { path: 'evidencias', component: Evidencias},
         {path: 'welcome', component: WelcomeComponent},
-        {path: 'docentes', component: DocentesComponent}
+        {path: 'docentes', component: DocentesComponent},
+        {path: 'detalles-permisos', component: DetallesPermisosComponent}
     ]}
 ];

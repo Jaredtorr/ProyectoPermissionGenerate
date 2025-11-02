@@ -37,4 +37,9 @@ export class SidebarComponent {
     event.preventDefault();
     this.router.navigate(['dashboard/docentes']);
   }
+
+  sendToDetallesPermisos(event: Event) { // 👈 agregado
+    event.preventDefault();
+    this.router.navigate(['dashboard/detalles-permisos']);
+  }
 }
