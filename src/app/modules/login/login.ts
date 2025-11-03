@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,12 +10,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.css']
 })
 export class Login {
+  username: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
   constructor(private router: Router) {}
 
   sendToRegister(event: Event) {
     event.preventDefault();
     this.router.navigate(['registro']);
   }
-  
-  onLogin() {}
+
+  onLogin(form: NgForm) {
+    if (form.invalid) {
+      this.errorMessage = 'Por favor completa los campos correctamente.';
+      return;
+    }
+    this.errorMessage = '';
+    console.log('Usuario:', this.username);
+    console.log('Contraseña:', this.password);
+  }
 }
