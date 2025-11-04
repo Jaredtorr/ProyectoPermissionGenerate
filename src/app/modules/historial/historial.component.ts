@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TitleService } from '../../services/title/title.service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 👈 IMPORTANTE
+import { CommonModule } from '@angular/common'; 
 
 interface Registro {
   matricula: string;
@@ -13,16 +13,20 @@ interface Registro {
 @Component({
   selector: 'app-historial',
   standalone: true,
-  imports: [CommonModule, FormsModule], // 👈 AGREGA CommonModule AQUÍ
+  imports: [CommonModule, FormsModule], 
   templateUrl: './historial.component.html',
   styleUrls: ['./historial.component.css']
 })
+
+
 export class HistorialComponent implements OnInit {
   filtro: string = '';
   registros: Registro[] = [];
   registrosFiltrados: Registro[] = [];
 
   constructor(private titleService: TitleService) {}
+
+
 
   ngOnInit() {
     this.titleService.setTitle('Historial');
@@ -35,6 +39,8 @@ export class HistorialComponent implements OnInit {
 
     this.registrosFiltrados = [...this.registros];
   }
+
+
 
   filtrarDatos() {
     const texto = this.filtro.toLowerCase().trim();

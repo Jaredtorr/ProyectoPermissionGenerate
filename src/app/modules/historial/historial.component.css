@@ -1,9 +1,8 @@
-/* Contenedor principal */
 main {
   font-family: "Poppins", sans-serif;
 }
 
-/* Tabla general */
+
 .min-w-full {
   width: 100%;
   border-collapse: collapse;
@@ -31,7 +30,7 @@ tbody tr:hover {
   transition: 0.3s;
 }
 
-/* Buscador */
+
 .relative {
   position: relative;
 }
@@ -59,12 +58,12 @@ tbody tr:hover {
   box-shadow: 0 0 0 2px rgba(0, 61, 107, 0.2);
 }
 
-/* Contenedor blanco */
+
 .bg-white {
   background-color: #fff;
 }
 
-/* Sombra suave */
+
 .shadow-lg {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
