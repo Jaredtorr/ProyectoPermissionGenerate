@@ -1,0 +1,59 @@
+<div class="flex justify-center items-start gap-12 p-12 pt-56 ml-32 bg-gray-100 min-h-[calc(100vh-100px)]">
+
+    <div class="bg-gray-200 shadow-md rounded-3xl p-6 w-80">
+        <ul class="space-y-3 font-semibold text-center text-sm">
+            <li *ngFor="let docente of docentes" (click)="seleccionarDocente(docente)"
+                class="py-3 rounded-full cursor-pointer transition-colors" [ngClass]="{
+          'bg-[#1B5A85] text-white': seleccionado?.nombre === docente.nombre,
+          'hover:bg-[#1B5A85] hover:text-white': seleccionado?.nombre !== docente.nombre
+        }">
+                {{ docente.nombre | uppercase }}
+            </li>
+        </ul>
+    </div>
+
+    <div class="bg-gray-100 shadow-md rounded-3xl p-8 w-[450px] border border-gray-200">
+        <h2 class="text-lg font-bold mb-6">Datos del docente</h2>
+
+        <form class="space-y-5" *ngIf="seleccionado; else sinSeleccion">
+            <div>
+                <label class="block text-sm font-medium mb-1">Nombre:</label>
+                <input [(ngModel)]="seleccionado.nombre" name="nombre" type="text"
+                    class="w-full border-b border-gray-400 focus:border-blue-600 outline-none p-1 bg-transparent" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Email:</label>
+                <input [(ngModel)]="seleccionado.email" name="email" type="email"
+                    class="w-full border-b border-gray-400 focus:border-blue-600 outline-none p-1 bg-transparent" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Teléfono:</label>
+                <input [(ngModel)]="seleccionado.telefono" name="telefono" type="tel"
+                    class="w-full border-b border-gray-400 focus:border-blue-600 outline-none p-1 bg-transparent" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Rol:</label>
+                <input [(ngModel)]="seleccionado.rol" name="rol" type="text"
+                    class="w-full border-b border-gray-400 focus:border-blue-600 outline-none p-1 bg-transparent" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Descripción:</label>
+                <textarea [(ngModel)]="seleccionado.descripcion" name="descripcion" rows="2"
+                    class="w-full border-b border-gray-400 focus:border-blue-600 outline-none p-1 bg-transparent"></textarea>
+            </div>
+
+            <div class="flex justify-center pt-4">
+                <button type="button"
+                    class="bg-blue-900 text-white px-5 py-2 rounded-md hover:bg-blue-800 active:scale-95 transition flex items-center gap-2 shadow-md">
+                    <span>Actualizar datos</span>
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </form>
+
+        <ng-template #sinSeleccion>
+            <p class="text-gray-500 text-center mt-10 italic">Selecciona un docente para ver su información.</p>
+        </ng-template>
+    </div>
+
+</div>
