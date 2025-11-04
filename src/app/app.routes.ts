@@ -8,6 +8,7 @@ import { WelcomeComponent } from './modules/welcome/welcome.component';
 import { DocentesComponent } from './modules/docentes/docentes.component';
 import { RegistroComponent } from './modules/registro/registro.component';
 import { HistorialComponent } from './modules/historial/historial.component';
+import { InfoDocentesComponent } from './modules/info-docentes/info-docentes.component';
 
 
 export const routes: Routes = [
@@ -20,7 +21,7 @@ export const routes: Routes = [
         { path: 'evidencias', component: Evidencias},
         {path: 'welcome', component: WelcomeComponent},
         {path: 'docentes', component: DocentesComponent},
-        {path: 'historial', component: HistorialComponent }
-
+        {path: 'historial', component: HistorialComponent },
+        { path: 'info-docentes', component: InfoDocentesComponent }
     ]}
 ];
