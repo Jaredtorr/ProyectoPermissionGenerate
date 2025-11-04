@@ -16,7 +16,7 @@ interface Docente {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './info-docentes.component.html',
-  styleUrl: './info-docentes.component.css'
+  styleUrls: ['./info-docentes.component.css']
 })
 export class InfoDocentesComponent {
   docentes: Docente[] = [
@@ -65,6 +65,8 @@ export class InfoDocentesComponent {
   ];
 
   seleccionado: Docente | null = null;
+  mostrarModal: boolean = false;
+  copiaTemporal: Docente | null = null;
 
   constructor(private titleService: TitleService) {}
 
@@ -74,5 +76,23 @@ export class InfoDocentesComponent {
 
   seleccionarDocente(docente: Docente) {
     this.seleccionado = docente;
+  }
+
+  abrirModal() {
+    this.copiaTemporal = { ...this.seleccionado! };
+    this.mostrarModal = true;
+  }
+
+  cerrarModal() {
+    this.mostrarModal = false;
+    this.copiaTemporal = null;
+  }
+
+  actualizarDocente() {
+    if (this.seleccionado && this.copiaTemporal) {
+      Object.assign(this.seleccionado, this.copiaTemporal);
+      console.log('Datos actualizados:', this.seleccionado);
+    }
+    this.cerrarModal();
   }
 }

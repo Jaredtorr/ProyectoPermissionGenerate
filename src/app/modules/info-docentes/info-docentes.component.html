@@ -4,9 +4,9 @@
         <ul class="space-y-3 font-semibold text-center text-sm">
             <li *ngFor="let docente of docentes" (click)="seleccionarDocente(docente)"
                 class="py-3 rounded-full cursor-pointer transition-colors" [ngClass]="{
-          'bg-[#1B5A85] text-white': seleccionado?.nombre === docente.nombre,
-          'hover:bg-[#1B5A85] hover:text-white': seleccionado?.nombre !== docente.nombre
-        }">
+            'bg-[#1B5A85] text-white': seleccionado?.nombre === docente.nombre,
+            'hover:bg-[#1B5A85] hover:text-white': seleccionado?.nombre !== docente.nombre
+          }">
                 {{ docente.nombre | uppercase }}
             </li>
         </ul>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="flex justify-center pt-4">
-                <button type="button"
+                <button type="button" (click)="abrirModal()"
                     class="bg-blue-900 text-white px-5 py-2 rounded-md hover:bg-blue-800 active:scale-95 transition flex items-center gap-2 shadow-md">
                     <span>Actualizar datos</span>
                     <i class="fa-solid fa-pen"></i>
@@ -52,8 +52,59 @@
         </form>
 
         <ng-template #sinSeleccion>
-            <p class="text-gray-500 text-center mt-10 italic">Selecciona un docente para ver su información.</p>
+            <p class="text-gray-500 text-center mt-10 italic">
+                Selecciona un docente para ver su información.
+            </p>
         </ng-template>
     </div>
+</div>
 
+<div *ngIf="mostrarModal"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
+    <div class="bg-white rounded-3xl shadow-lg p-8 w-[420px] relative animate-fadeIn">
+        <h2 class="text-center text-lg font-bold mb-6">Actualizar datos del docente</h2>
+
+        <form class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Nombre:</label>
+                <input [(ngModel)]="copiaTemporal!.nombre" name="nombreModal" type="text"
+                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-600 outline-none" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Email:</label>
+                <input [(ngModel)]="copiaTemporal!.email" name="emailModal" type="email"
+                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-600 outline-none" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Teléfono:</label>
+                <input [(ngModel)]="copiaTemporal!.telefono" name="telefonoModal" type="tel"
+                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-600 outline-none" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Rol:</label>
+                <input [(ngModel)]="copiaTemporal!.rol" name="rolModal" type="text"
+                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-600 outline-none" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Descripción:</label>
+                <textarea [(ngModel)]="copiaTemporal!.descripcion" name="descripcionModal" rows="2"
+                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-600 outline-none"></textarea>
+            </div>
+
+            <div class="flex justify-between mt-6">
+                <button type="button" (click)="cerrarModal()"
+                    class="bg-red-600 text-white px-5 py-2 rounded-md hover:bg-red-500 active:scale-95 flex items-center gap-2 shadow-md">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span>Cancelar</span>
+                </button>
+
+                <button type="button" (click)="actualizarDocente()"
+                    class="bg-blue-900 text-white px-5 py-2 rounded-md hover:bg-blue-800 active:scale-95 flex items-center gap-2 shadow-md">
+                    <span>Actualizar datos</span>
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </form>
+
+    </div>
 </div>
