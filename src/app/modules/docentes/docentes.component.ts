@@ -1,90 +1,262 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModalDocenteComponent } from '../../components/modal-docente/modal-docente.component';
-import { ModalAlertComponent } from '../../components/modal-alert/modal-alert.component';
-import { ModalAvisoComponent } from '../../components/modal-aviso/modal-aviso.component';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { TitleService } from '../../services/title/title.service';
+import { DocentesService } from '../../services/docentes/docentes.service';
+import { UsersService } from '../../services/users/users.service';
+import { RegisterRequest, RegisterResponse } from '../../models/user';
 
-interface Docente {
-  nombre: string;
-  apellidoP: string;
-  apellidoM: string;
-  correo: string;
-  numero: string;
-  cuatrimestre: string;
-  materia: string;
+interface CreateTeacherForm {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  secondLastName: string;
+  email: string;
+  phone: string;
+  password: string;
 }
 
 @Component({
   selector: 'app-docentes',
   standalone: true,
-  imports: [CommonModule, ModalDocenteComponent, ModalAlertComponent, ModalAvisoComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './docentes.component.html',
+  styleUrls: ['./docentes.component.css']
 })
 export class DocentesComponent implements OnInit {
-  isModalVisible = false;          // Modal para agregar
-  isAlertVisible = false;          // Modal de alerta/eliminar
-  isEditModalVisible = false;      // Modal de edición
-  docenteSeleccionado: Docente | null = null;  // Para eliminar
-  docenteParaEditar: Docente | null = null;    // Para editar
+  teachers: any[] = [];
+  teachersFiltered: any[] = [];
+  total: number = 0;
+  isLoading: boolean = false;
+  error: string = '';
+  searchTerm: string = '';
+  currentFilter: string = 'all';
 
-  docentes: Docente[] = [
-    { nombre: 'Ali', apellidoP: 'Lopez', apellidoM: 'Zunun', correo: 'ali.lopez@upchiapas.edu.mx', numero: '9661155544', cuatrimestre: '5', materia: 'Programación' },
-    { nombre: 'Eduardo', apellidoP: 'Toledo', apellidoM: 'Perez', correo: 'eduardo.toledo@upchiapas.edu.mx', numero: '9661155549', cuatrimestre: '3', materia: 'Base de Datos' },
-    { nombre: 'Daniel', apellidoP: 'Chanona', apellidoM: 'Castro', correo: 'daniel.chanona@upchiapas.edu.mx', numero: '9661155355', cuatrimestre: '7', materia: 'Redes' },
+  // Modal state
+  showModal: boolean = false;
+  isSubmitting: boolean = false;
+  formError: string = '';
+  formSuccess: string = '';
+
+  // Form data
+  teacherForm: CreateTeacherForm = {
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    secondLastName: '',
+    email: '',
+    phone: '',
+    password: ''
+  };
+
+  roleFilters = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Tutores', value: 'Tutor' },
+    { label: 'Profesores', value: 'Teacher' }
   ];
 
-  constructor(private titleService: TitleService) {}
+  constructor(
+    private titleService: TitleService,
+    private docentesService: DocentesService,
+    private usersService: UsersService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.titleService.setTitle('Docentes');
-    this.titleService.setSearch(false);
+    this.loadTeachers();
   }
 
-  // Abrir modal de agregar
-  abrirModal() {
-    this.isModalVisible = true;
-  }
-  cerrarModal() {
-    this.isModalVisible = false;
-  }
-  guardarDocente(docente: Docente) {
-    this.docentes.push(docente);
-    this.cerrarModal();
-  }
+  loadTeachers() {
+    this.isLoading = true;
+    this.error = '';
 
-  // Abrir modal de edición
-  abrirEditModal(docente: Docente) {
-    this.docenteParaEditar = { ...docente }; // clonamos para no modificar directamente
-    this.isEditModalVisible = true;
-  }
-  cerrarEditModal() {
-    this.isEditModalVisible = false;
-    this.docenteParaEditar = null;
-  }
-  actualizarDocente(docenteActualizado: Docente) {
-    if (this.docenteParaEditar) {
-      const index = this.docentes.findIndex(d => d === this.docenteParaEditar);
-      if (index > -1) {
-        this.docentes[index] = docenteActualizado;
+    this.docentesService.getAllTeachers().subscribe({
+      next: (response) => {
+        this.teachers = response.teachers;
+        this.teachersFiltered = this.teachers;
+        this.total = response.total;
+        this.isLoading = false;
+        this.applyFilter();
+      },
+      error: (error) => {
+        console.error('Error al cargar docentes:', error);
+        this.error = 'Error al cargar los docentes. Por favor, intenta de nuevo.';
+        this.isLoading = false;
       }
-    }
-    this.cerrarEditModal();
+    });
   }
 
-  // Abrir modal de eliminar
-  confirmarEliminacion(docente: Docente) {
-    this.docenteSeleccionado = docente;
-    this.isAlertVisible = true;
+  filterByRole(role: string) {
+    this.currentFilter = role;
+    this.applyFilter();
   }
-  cerrarAlerta() {
-    this.isAlertVisible = false;
-  }
-  eliminarDocenteConfirmado() {
-    if (this.docenteSeleccionado) {
-      this.docentes = this.docentes.filter(d => d !== this.docenteSeleccionado);
-      this.docenteSeleccionado = null;
+
+  applyFilter() {
+    let filtered = this.teachers;
+
+    if (this.currentFilter !== 'all') {
+      filtered = filtered.filter(teacher => 
+        teacher.informacionRol.nombreRol === this.currentFilter
+      );
     }
-    this.cerrarAlerta();
+
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase().trim();
+      filtered = filtered.filter(teacher => {
+        const nombre = teacher.informacionPersonal.nombreCompleto.toLowerCase();
+        const email = teacher.informacionPersonal.email.toLowerCase();
+        const telefono = teacher.informacionPersonal.telefono.toLowerCase();
+        const rol = teacher.informacionRol.nombreRol.toLowerCase();
+        
+        return nombre.includes(term) || 
+               email.includes(term) || 
+               telefono.includes(term) ||
+               rol.includes(term);
+      });
+    }
+
+    this.teachersFiltered = filtered;
+  }
+
+  searchTeachers(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.searchTerm = target.value;
+    this.applyFilter();
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.applyFilter();
+  }
+
+  getCountByRole(role: string): number {
+    if (role === 'all') {
+      return this.teachers.length;
+    }
+    return this.teachers.filter(teacher => 
+      teacher.informacionRol.nombreRol === role
+    ).length;
+  }
+
+  getFilterButtonClass(role: string): string {
+    const baseClasses = 'px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200';
+    
+    if (this.currentFilter === role) {
+      return `${baseClasses} bg-blue-600 text-white shadow-lg transform scale-105`;
+    }
+    return `${baseClasses} bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-blue-300`;
+  }
+
+  getRoleBadgeClass(role: string): string {
+    switch(role) {
+      case 'Tutor':
+        return 'bg-blue-100 text-blue-800';
+      case 'Teacher':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  }
+
+  getRoleIcon(role: string): string {
+    switch(role) {
+      case 'Tutor':
+        return 'bx-user-check';
+      case 'Teacher':
+        return 'bx-chalkboard';
+      default:
+        return 'bx-user';
+    }
+  }
+
+  getCurrentFilterLabel(): string {
+    const filter = this.roleFilters.find(f => f.value === this.currentFilter);
+    return filter ? filter.label : 'Todos';
+  }
+
+  verDetalle(teacher: any) {
+    console.log('Ver detalle del docente:', teacher);
+    // this.router.navigate(['/docentes', teacher.teacherId]);
+  }
+
+  refreshTeachers() {
+    this.loadTeachers();
+  }
+
+  // Modal methods
+  openModal() {
+    this.showModal = true;
+    this.resetForm();
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.teacherForm = {
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      secondLastName: '',
+      email: '',
+      phone: '',
+      password: ''
+    };
+    this.formError = '';
+    this.formSuccess = '';
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.teacherForm.firstName.trim() &&
+      this.teacherForm.lastName.trim() &&
+      this.teacherForm.secondLastName.trim() &&
+      this.teacherForm.email.trim() &&
+      this.teacherForm.phone.trim() &&
+      this.teacherForm.password.trim()
+    );
+  }
+
+  submitTeacher() {
+    if (!this.isFormValid()) {
+      this.formError = 'Por favor, completa todos los campos obligatorios';
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.formError = '';
+    this.formSuccess = '';
+
+    const registerData: RegisterRequest = {
+      firstName: this.teacherForm.firstName,
+      middleName: this.teacherForm.middleName || undefined,
+      lastName: this.teacherForm.lastName,
+      secondLastName: this.teacherForm.secondLastName,
+      email: this.teacherForm.email,
+      phone: this.teacherForm.phone,
+      password: this.teacherForm.password,
+      roleId: 2 // Teacher role
+    };
+
+    this.usersService.register(registerData).subscribe({
+      next: (response: RegisterResponse) => {
+        this.formSuccess = `Docente creado exitosamente: ${response.data.name}`;
+        this.isSubmitting = false;
+        
+        setTimeout(() => {
+          this.closeModal();
+          this.loadTeachers();
+        }, 1500);
+      },
+      error: (error: any) => {
+        console.error('Error al crear docente:', error);
+        this.formError = error.error?.message || 'Error al crear el docente. Por favor, intenta de nuevo.';
+        this.isSubmitting = false;
+      }
+    });
   }
 }
