@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { GeneratePermissionComponent } from './modules/generate-permission/generate-permission.component';
 import { TutoradosComponent } from './modules/tutorados/tutorados.component';
@@ -8,20 +9,32 @@ import { WelcomeComponent } from './modules/welcome/welcome.component';
 import { DocentesComponent } from './modules/docentes/docentes.component';
 import { RegistroComponent } from './modules/registro/registro.component';
 import { HistorialComponent } from './modules/historial/historial.component';
-import { InfoDocentesComponent } from './modules/info-docentes/info-docentes.component';
+import { PermitionDetailComponent } from './modules/permition-detail/permition-detail.component';
+import { AuthCallbackComponent } from './modules/auth-callback/auth-callback.component';
+import { PermissionComponent } from './modules/permission/permission.component';
+import { TutoradoDetailComponent } from './modules/tutorado-detail/tutorado-detail.component';
+import { StudentComponent } from './modules/student/student.component';
+import { PerfilTutorComponent } from './modules/perfil-tutor/perfil-tutor.component';
+import { HistoryStudentComponent } from './modules/history-student/history-student.component';
 
 
 export const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: Login },
     { path: 'registro', component: RegistroComponent },
-    { path: 'dashboard', component: DashboardComponent, children: [
+    { path: 'auth/callback', component: AuthCallbackComponent },
+    { path: 'dashboard', component: DashboardComponent, /*canActivate: [authGuard],*/ children: [
+        { path: 'permission', component: PermissionComponent },
         { path: 'generate-permission', component: GeneratePermissionComponent },
         { path: 'tutorados', component: TutoradosComponent },
-        { path: 'evidencias', component: Evidencias},
-        {path: 'welcome', component: WelcomeComponent},
-        {path: 'docentes', component: DocentesComponent},
-        {path: 'historial', component: HistorialComponent },
-        { path: 'info-docentes', component: InfoDocentesComponent }
-    ]}
+        { path: 'evidencias', component: Evidencias },
+        { path: 'welcome', component: WelcomeComponent },
+        { path: 'docentes', component: DocentesComponent },
+        { path: 'historial', component: HistorialComponent },
+        { path: 'permition/detail/:matricule/:id', component: PermitionDetailComponent },
+        { path: 'tutorado/detail/:matricule', component: TutoradoDetailComponent },
+        { path: 'profile/docente/:id/:name', component: PerfilTutorComponent }
+    ]},
+    { path: 'student', component: StudentComponent },
+    { path: 'student/history', component: HistoryStudentComponent }
 ];
